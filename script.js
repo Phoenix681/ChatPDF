@@ -90,7 +90,4 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("chatQuery").addEventListener("keydown", (e) => {
     if (e.key === "Enter") handleChat();
   });
-  document.getElementById("quizTopic").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleQuiz();
-  });
 });
