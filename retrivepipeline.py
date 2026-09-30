@@ -9,16 +9,11 @@ from indexingpipe import get_active_collection, CHROMA_PATH
 
 load_dotenv()
 
-# --- Global model clients (cheap to init, no network call at startup) ---
 llm = ChatGoogleGenerativeAI(temperature=0.2, model="gemini-3.6-flash")
 embedding_models = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
 
 
 def get_vector_db() -> Chroma:
-    """
-    Lazily connects to whichever collection is currently active.
-    Raises a clear error if no PDF has been indexed yet.
-    """
     collection = get_active_collection()
     if not collection:
         raise RuntimeError(
@@ -39,11 +34,9 @@ def get_vector_db() -> Chroma:
 
 
 def ask_tutor(user_query: str) -> dict:
-    """Retrieves context and answers queries. Returns answer + cited page numbers."""
     vector_db = get_vector_db()
     search_results = vector_db.similarity_search(query=user_query, k=4)
 
-    # Collect unique page numbers from retrieved chunks
     pages = sorted(set(
         str(r.metadata.get("page_label") or r.metadata.get("page", ""))
         for r in search_results
@@ -74,9 +67,6 @@ Context:
         {"role": "user", "content": user_query}
     ])
 
-    # response.content can be a plain string or a list of content blocks
-    # (e.g. [{"type": "text", "text": "..."}]) depending on the model/provider.
-    # Normalize it to a plain string before returning it to the frontend.
     raw_content = response.content
     if isinstance(raw_content, list):
         answer_text = "".join(

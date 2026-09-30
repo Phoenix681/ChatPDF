@@ -10,7 +10,6 @@ from retrivepipeline import ask_tutor
 
 app = FastAPI(title="ChatPDF", version="1.0.0")
 
-# Configure CORS so the HTML frontend can reach this backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,25 +21,18 @@ app.add_middleware(
 
 @app.post("/upload-pdf")
 async def upload_and_index(file: UploadFile = File(...)):
-    """
-    Receives a PDF file, saves it temporarily, indexes it into the
-    Qdrant vector database, then removes the temp file.
-    """
+    
     if not file.filename.lower().endswith(".pdf"):
         return {"status": "error", "message": "Only PDF files are accepted."}
 
-    # FIX: use a UUID prefix so concurrent uploads never collide
-    # and path-traversal characters in filenames are neutralised.
     original_stem = Path(file.filename).stem
     safe_name = f"tmp_{uuid.uuid4().hex}.pdf"
     file_path = os.path.join(os.getcwd(), safe_name)
 
     try:
-        # 1. Save upload to a safe temp path
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        # 2. Run the indexing pipeline — returns the new collection name
         collection_name = index_document(file_name=file_path,display_name=file.filename)
 
         return {
@@ -54,16 +46,12 @@ async def upload_and_index(file: UploadFile = File(...)):
     except Exception as e:
         return {"status": "error", "message": f"Failed to process document: {str(e)}"}
     finally:
-        # 3. Always clean up, even on failure
         if os.path.exists(file_path):
             os.remove(file_path)
 
 
 @app.post("/chat")
 async def chat_with_tutor(question: str = Form(...)):
-    """
-    Returns a context-aware, page-cited answer from the indexed documents.
-    """
     if not question.strip():
         return {"status": "error", "answer": "Please provide a non-empty question."}
     try:

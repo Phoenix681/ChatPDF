@@ -85,7 +85,6 @@ async function handleChat() {
   }
 }
 
-// Allow pressing Enter to submit chat query
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("chatQuery").addEventListener("keydown", (e) => {
     if (e.key === "Enter") handleChat();

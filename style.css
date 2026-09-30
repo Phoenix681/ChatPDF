@@ -29,7 +29,6 @@ body {
   margin: 0 auto;
 }
 
-/* Header Styling */
 header {
   text-align: center;
   margin-bottom: 4rem;
@@ -53,7 +52,6 @@ header p {
   max-width: 600px;
 }
 
-/* Layout Grid */
 .grid-container {
   display: flex;
   flex-direction: column;
@@ -64,7 +62,6 @@ header p {
   width: 100%;
 }
 
-/* Card Styling */
 .card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -92,7 +89,6 @@ header p {
   margin-bottom: 2rem;
 }
 
-/* Inputs and Buttons */
 input[type="file"],
 input[type="text"] {
   width: 100%;
@@ -157,7 +153,6 @@ button:disabled {
   transform: none;
 }
 
-/* Output Areas */
 #chat-results {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -170,7 +165,6 @@ button:disabled {
   font-size: 1rem;
 }
 
-/* Utilities */
 .status-msg {
   font-size: 0.9rem;
   margin-top: 1rem;
@@ -179,7 +173,6 @@ button:disabled {
   color: #34d399; 
 }
 
-/* Custom Scrollbar for results */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -195,7 +188,6 @@ button:disabled {
   background: #475569;
 }
 
-/* --- Page Reference Box --- */
 .page-ref-box {
   display: flex;
   align-items: center;
@@ -228,7 +220,6 @@ button:disabled {
   border-radius: 999px;
 }
 
-/* --- Active Collection Tag --- */
 .collection-tag {
   display: inline-block;
   margin-left: 0.5rem;
